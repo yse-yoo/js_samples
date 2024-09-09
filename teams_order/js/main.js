@@ -3,31 +3,46 @@ const shuffleButton = document.getElementById('shuffleBtn');
 const teamListDiv = document.getElementById('team-list');
 const resultDiv = document.getElementById('result');
 
-// フィールドを生成する
-generateFieldsButton.addEventListener('click', function () {
-    const teamCount = parseInt(document.getElementById('teamCount').value);
+/**
+ * createFiels()
+ * 
+ * フィールドを生成する
+ */ 
+const createFields = () => {
+    const countField = document.getElementById('teamCount');
+    // 値を取得し、数値に変換
+    const teamCount = Number(countField.value)
+    console.log(teamCount);
     teamListDiv.innerHTML = ''; // 前回のフィールドをクリア
     resultDiv.innerHTML = ''; // 前回の結果をクリア
 
     if (teamCount && teamCount > 0) {
         // チーム名入力フィールドを生成
-        for (let i = 1; i <= teamCount; i++) {
-            const inputField = document.createElement('div');
-            inputField.classList.add('flex', 'mb-4');
-            inputField.innerHTML = `<input type="text" id="teamName${i}" class="flex-1 p-2 border border-gray-300 rounded" placeholder="チーム名${i}">`;
-            teamListDiv.appendChild(inputField);
+        for (var i = 1; i <= teamCount; i++) {
+            const div = document.createElement('div');
+            div.classList.add('flex', 'mb-4');
+            const input = document.createElement('input');
+            input.type = "text";
+            input.id = `teamName${i}`;
+            input.classList.add('flex-1', 'p-2', 'border', 'border-gray-300', 'rounded');
+            input.placeholder = `チーム名${i}`;
+            div.appendChild(input);
+            teamListDiv.appendChild(div);
         }
-
         // シャッフルボタンを有効化
         shuffleButton.disabled = false;
     } else {
         alert('チーム数を正しく入力してください');
         shuffleButton.disabled = true;
     }
-});
+}
 
-// チーム名をシャッフルする
-shuffleButton.addEventListener('click', function () {
+/**
+ * createFiels()
+ * 
+ * チームをシャッフルする
+ */ 
+const shuffleTeams = () => {
     const teamNames = [];
     const teamCount = parseInt(document.getElementById('teamCount').value);
 
@@ -50,4 +65,4 @@ shuffleButton.addEventListener('click', function () {
 
     // 結果を表示
     resultDiv.innerHTML = `<p>発表順:</p><ol class="list-decimal list-inside">${shuffledTeams.map(team => `<li>${team}</li>`).join('')}</ol>`;
-});
+}
