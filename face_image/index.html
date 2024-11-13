@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webcam Capture and Edit</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+    <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full text-center">
+        <h1 class="text-2xl font-bold mb-4">Webcam Face Capture</h1>
+
+        <!-- Video for real-time webcam feed -->
+        <video id="webcam" autoplay playsinline class="w-full rounded-md border border-gray-300"></video>
+
+        <!-- Capture, Filter, and Download Buttons -->
+        <div class="mt-4 space-y-2">
+            <button onclick="captureImage()" id="captureButton" class="bg-purple-600 text-white px-4 py-2 rounded-md w-full hover:bg-purple-700">Capture</button>
+            <button onclick="grayscaleFilter()" id="applyFilterButton" class="bg-blue-600 text-white px-4 py-2 rounded-md w-full hover:bg-blue-700">Apply Grayscale Filter</button>
+            <button onclick="downloadImage()" id="downloadButton" class="bg-green-600 text-white px-4 py-2 rounded-md w-full hover:bg-green-700" disabled>Download Image</button>
+        </div>
+
+        <!-- Canvas for captured image -->
+        <div class="mt-4">
+            <canvas id="canvas" class="w-full rounded-md border border-gray-300"></canvas>
+        </div>
+    </div>
+
+    <!-- JavaScriptファイルの読み込み -->
+    <script src="js/app.js" defer></script>
+</body>
+
+</html>
