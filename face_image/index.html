@@ -16,16 +16,28 @@
         <!-- Video for real-time webcam feed -->
         <video id="webcam" autoplay playsinline class="w-full rounded-md border border-gray-300"></video>
 
-        <!-- Capture, Filter, and Download Buttons -->
+        <!-- Capture Button -->
         <div class="mt-4 space-y-2">
-            <button onclick="captureImage()" id="captureButton" class="bg-purple-600 text-white px-4 py-2 rounded-md w-full hover:bg-purple-700">Capture</button>
-            <button onclick="mergeImage()" id="mergeImageButton"  class="bg-blue-600 text-white px-4 py-2 rounded-md w-full hover:bg-blue-700">Merge Image</button>
-            <button onclick="downloadImage()" id="downloadButton" class="bg-green-600 text-white px-4 py-2 rounded-md w-full hover:bg-green-700" disabled>Download Image</button>
+            <button onclick="captureImage()" id="captureButton"
+                class="bg-purple-600 text-white px-4 py-2 rounded-md w-full hover:bg-purple-700">Capture</button>
         </div>
 
         <!-- Canvas for captured image -->
         <div class="mt-4">
             <canvas id="canvas" class="w-full rounded-md border border-gray-300"></canvas>
+        </div>
+
+        <!-- サムネイル選択エリア -->
+        <h3>Select a Frame</h3>
+        <div id="thumbnailContainer" class="flex gap-2 justify-center mt-2">
+            <!-- JavaScriptでサムネイル画像を挿入 -->
+        </div>
+
+        <!-- Download Button -->
+        <div class="mt-4 space-y-2">
+            <button onclick="downloadImage()" id="downloadButton"
+                class="bg-green-600 text-white px-4 py-2 rounded-md w-full hover:bg-green-700" disabled>Download
+                Image</button>
         </div>
     </div>
 
