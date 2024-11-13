@@ -39,6 +39,23 @@ function grayscaleFilter() {
     ctx.putImageData(imageData, 0, 0);
 }
 
+// Merge an image onto the captured image
+function mergeImage() {
+    const logo = new Image();
+    logo.src = 'images/frame1.png'; // 合成する画像のパス
+
+    // 画像が読み込まれたらキャンバスに合成
+    logo.onload = () => {
+        // キャプチャ画像のサイズに合わせて、合成画像のサイズも canvas 全体に拡大
+        const width = canvas.width;
+        const height = canvas.height;
+        
+        // (0, 0) からキャンバス全体に合成画像を描画
+        ctx.drawImage(logo, 0, 0, width, height);
+    };
+}
+
+// Download the captured image with applied filter
 function downloadImage() {
     const link = document.createElement('a');
     link.href = canvas.toDataURL('image/png');
