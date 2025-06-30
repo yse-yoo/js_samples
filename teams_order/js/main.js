@@ -4,65 +4,76 @@ const teamListDiv = document.getElementById('team-list');
 const resultDiv = document.getElementById('result');
 
 /**
- * createFiels()
- * 
  * フィールドを生成する
- */ 
+ */
 const createFields = () => {
     const countField = document.getElementById('teamCount');
-    // 値を取得し、数値に変換
-    const teamCount = Number(countField.value)
-    console.log(teamCount);
-    teamListDiv.innerHTML = ''; // 前回のフィールドをクリア
-    resultDiv.innerHTML = ''; // 前回の結果をクリア
+    const bulkInput = document.getElementById('bulkInput');
+    const teamList = teamListDiv;
+    const result = resultDiv;
 
-    if (teamCount && teamCount > 0) {
-        // チーム名入力フィールドを生成
-        for (var i = 1; i <= teamCount; i++) {
+    const teamCount = Number(countField.value);
+    const bulkNames = bulkInput.value
+        .split('\n')
+        .map(name => name.trim())
+        .filter(name => name !== '');
+
+    teamList.innerHTML = '';
+    result.innerHTML = '';
+
+    const actualCount = teamCount > 0 ? teamCount : bulkNames.length;
+
+    if (actualCount > 0) {
+        for (let i = 1; i <= actualCount; i++) {
             const div = document.createElement('div');
-            div.classList.add('flex', 'mb-4');
+            div.classList.add('flex', 'mb-2');
+
             const input = document.createElement('input');
             input.type = "text";
             input.id = `teamName${i}`;
             input.classList.add('flex-1', 'p-2', 'border', 'border-gray-300', 'rounded');
             input.placeholder = `チーム名${i}`;
+            if (bulkNames[i - 1]) input.value = bulkNames[i - 1]; // 自動入力
+
             div.appendChild(input);
-            teamListDiv.appendChild(div);
+            teamList.appendChild(div);
         }
-        // シャッフルボタンを有効化
         shuffleButton.disabled = false;
     } else {
-        alert('チーム数を正しく入力してください');
+        alert('チーム数かチーム名を入力してください');
         shuffleButton.disabled = true;
     }
 }
 
 /**
- * createFiels()
- * 
  * チームをシャッフルする
- */ 
+ */
 const shuffleTeams = () => {
     const teamNames = [];
-    const teamCount = parseInt(document.getElementById('teamCount').value);
+    const inputs = document.querySelectorAll('[id^="teamName"]');
 
-    // チーム名を配列に格納
-    for (let i = 1; i <= teamCount; i++) {
-        const teamName = document.getElementById(`teamName${i}`).value;
-        if (teamName) {
-            teamNames.push(teamName);
-        }
-    }
+    inputs.forEach(input => {
+        const name = input.value.trim();
+        if (name) teamNames.push(name);
+    });
 
-    // チーム名が入力されていない場合は警告
     if (teamNames.length === 0) {
         alert('少なくとも1つのチーム名を入力してください');
         return;
     }
 
-    // チーム名をシャッフル
+    // シャッフル
     const shuffledTeams = teamNames.sort(() => Math.random() - 0.5);
 
-    // 結果を表示
-    resultDiv.innerHTML = `<p>発表順:</p><ol class="list-decimal list-inside">${shuffledTeams.map(team => `<li>${team}</li>`).join('')}</ol>`;
+    resultDiv.innerHTML = `
+        <p class="mb-2">発表順:</p>
+        <ol class="list-decimal list-inside">
+            ${shuffledTeams.map(team => `<li>${team}</li>`).join('')}
+        </ol>
+    `;
 }
+
+document.getElementById('bulkInput').addEventListener('input', () => {
+    // ペースト後に自動生成
+    createFields();
+});
