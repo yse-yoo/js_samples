@@ -1,6 +1,5 @@
 const shuffleButton = document.getElementById('shuffleBtn');
 const teamListDiv = document.getElementById('team-list');
-const resultDiv = document.getElementById('result');
 const addBulkBtn = document.getElementById('addBulkBtn');
 const bulkInput = document.getElementById('bulkInput');
 
@@ -88,9 +87,27 @@ const shuffleTeams = () => {
 
     const shuffled = teamNames.sort(() => Math.random() - 0.5);
 
-    resultDiv.innerHTML = `
-        <ol class="list-decimal list-inside">
+    const html = `
+        <ol class="list-decimal list-inside space-y-1 text-lg">
             ${shuffled.map(name => `<li>${name}</li>`).join('')}
         </ol>
     `;
+
+    // jQueryでフェードアウト → 内容変更 → フェードイン
+    $('#result').fadeOut(0, function () {
+        $(this).html(html).fadeIn(1000);
+    });
 };
+
+const clearBtn = document.getElementById('clearBtn');
+
+clearBtn.addEventListener('click', () => {
+    // チームリスト全削除
+    teamListDiv.innerHTML = '';
+    // シャッフルボタン無効化
+    shuffleButton.disabled = true;
+    // 結果を消す（任意）
+    $('#result').fadeOut(200, () => {
+        $('#result').html('');
+    });
+});

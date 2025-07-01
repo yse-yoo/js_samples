@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>チーム発表順生成アプリ</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body class="bg-gray-100">
@@ -19,29 +20,35 @@
                 <!-- 一括入力 -->
                 <textarea id="bulkInput" placeholder="一括入力（改行区切り）" class="w-full p-2 border border-gray-300 rounded"
                     rows="5"></textarea>
-                <!-- 手動追加ボタン -->
-                <div class="text-center my-2">
+
+                <!-- チームリスト -->
+                <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+                    <h2 class="text-2xl font-bold">チームリスト</h2>
+
+                    <div class="flex gap-2">
                     <button id="addBulkBtn" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
                         一括入力から追加
                     </button>
+                        <!-- シャッフルボタン -->
+                        <button onclick="shuffleTeams()" id="shuffleBtn"
+                            class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:opacity-50"
+                            disabled>
+                            シャッフルする
+                        </button>
+                        <!-- 一括削除ボタン -->
+                        <button id="clearBtn" class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500">
+                            クリア
+                        </button>
+                    </div>
                 </div>
 
-                <!-- チームリスト -->
-                <div class="flex flex-col gap-2 mb-4">
-                    <h2 class="text-2xl font-bold my-2 text-center">チームリスト</h2>
-                    <!-- シャッフルボタン -->
-                    <button onclick="shuffleTeams()" id="shuffleBtn"
-                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:opacity-50" disabled>
-                        シャッフルする
-                    </button>
-                </div>
                 <div id="team-list" class="mb-4"></div>
             </div>
 
             <!-- 右カラム：結果表示 -->
             <div class="flex-1">
                 <h2 class="text-xl font-bold mb-4">発表順の結果</h2>
-                <div id="result" class="bg-gray-50 border border-gray-300 rounded p-4"></div>
+                <div id="result" class="bg-white-50 p-4"></div>
                 <div id="message" class="mt-2 text-red-500 text-sm"></div>
             </div>
 
