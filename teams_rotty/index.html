@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>チーム発表順生成アプリ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body class="bg-gray-100">
+
+    <div class="min-h-screen flex justify-center items-start p-4">
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-6xl w-full flex flex-col md:flex-row gap-8">
+
+            <!-- 左カラム：入力エリア -->
+            <div class="flex-1">
+                <h2 class="text-2xl font-bold mb-2 text-center">当選アプリ</h2>
+                <!-- 一括入力 -->
+                <textarea id="bulkInput" placeholder="一括入力（改行区切り）" class="w-full p-2 border border-gray-300 rounded"
+                    rows="5"></textarea>
+
+                <!-- チームリスト -->
+                <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+                    <h2 class="text-2xl font-bold">チームリスト</h2>
+
+                    <div class="flex gap-2">
+                        <button id="addBulkBtn" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                            一括入力から追加
+                        </button>
+                        <!-- 一括削除ボタン -->
+                        <button id="clearBtn" class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500">
+                            クリア
+                        </button>
+                    </div>
+                </div>
+
+                <div id="team-list" class="mb-4"></div>
+            </div>
+
+            <!-- 右カラム：結果表示 -->
+            <div class="flex-1">
+                <!-- ルーレットボタン -->
+                <button id="startRouletteBtn"
+                    class="mt-6 bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 w-full">
+                    ルーレットで当選チームを決める
+                </button>
+
+                <!-- 当選者表示 -->
+                <div id="winner" class="mt-6 text-center text-2xl font-bold text-purple-700"></div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>
