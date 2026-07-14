@@ -6,54 +6,108 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>チーム発表順生成アプリ</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        .roulette-name {
+            transition: transform 120ms ease, opacity 120ms ease;
+            overflow-wrap: anywhere;
+        }
+
+        .roulette-name.is-spinning {
+            transform: scale(1.04);
+            opacity: 0.82;
+        }
+
+        .roulette-ring {
+            background:
+                radial-gradient(circle at center, #ffffff 0 58%, transparent 59%),
+                conic-gradient(from 0deg, #2563eb, #22c55e, #f59e0b, #ef4444, #8b5cf6, #2563eb);
+        }
+
+        .roulette-ring.is-active {
+            animation: roulette-spin 900ms linear infinite;
+        }
+
+        @keyframes roulette-spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
 </head>
 
-<body class="bg-gray-100">
+<body class="bg-slate-100 text-slate-900">
+    <main class="min-h-screen px-4 py-6 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-6xl">
+            <header class="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                    <p class="text-sm font-semibold text-blue-700">Presentation Order</p>
+                    <h1 class="text-3xl font-bold tracking-normal">チーム発表順生成</h1>
+                </div>
+                <div class="rounded-full bg-white px-4 py-2 text-sm font-medium text-slate-600 shadow-sm">
+                    ルーレット抽選
+                </div>
+            </header>
 
-    <div class="min-h-screen flex justify-center items-start p-4">
-        <div class="bg-white p-6 rounded-lg shadow-lg max-w-6xl w-full flex flex-col md:flex-row gap-8">
+            <div class="grid gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(360px,0.95fr)]">
+                <section class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+                    <div class="mb-4">
+                        <h2 class="text-xl font-bold">チーム入力</h2>
+                        <p class="mt-1 text-sm text-slate-500">1行ずつ貼り付けて追加できます。</p>
+                    </div>
 
-            <!-- 左カラム：入力エリア -->
-            <div class="flex-1">
-                <h2 class="text-2xl font-bold mb-2 text-center">チーム発表順作成</h2>
-                <!-- 一括入力 -->
-                <textarea id="bulkInput" placeholder="一括入力（改行区切り）" class="w-full p-2 border border-gray-300 rounded"
-                    rows="5"></textarea>
+                    <textarea id="bulkInput" placeholder="一括入力（1行に1チーム）"
+                        class="min-h-32 w-full resize-y rounded-md border border-slate-300 bg-white p-3 text-base outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                        rows="5"></textarea>
 
-                <!-- チームリスト -->
-                <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
-                    <h2 class="text-2xl font-bold">チームリスト</h2>
-
-                    <div class="flex gap-2">
-                    <button id="addBulkBtn" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
-                        一括入力から追加
-                    </button>
-                        <!-- シャッフルボタン -->
-                        <button onclick="shuffleTeams()" id="shuffleBtn"
-                            class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:opacity-50"
-                            disabled>
-                            順番を決める
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        <button id="addBulkBtn"
+                            class="rounded-md bg-emerald-600 px-4 py-2 font-semibold text-white shadow-sm transition hover:bg-emerald-700">
+                            追加
                         </button>
-                        <!-- 一括削除ボタン -->
-                        <button id="clearBtn" class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500">
+                        <button id="shuffleBtn"
+                            class="rounded-md bg-blue-600 px-5 py-2 font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-500 disabled:shadow-none"
+                            disabled>
+                            抽選開始
+                        </button>
+                        <button id="clearBtn"
+                            class="rounded-md border border-slate-300 bg-white px-4 py-2 font-semibold text-slate-700 transition hover:bg-slate-50">
                             クリア
                         </button>
                     </div>
-                </div>
 
-                <div id="team-list" class="mb-4"></div>
+                    <div class="mt-6 flex items-center justify-between border-b border-slate-200 pb-2">
+                        <h2 class="text-base font-bold">チームリスト</h2>
+                        <span class="text-sm text-slate-500">Enterで行を追加</span>
+                    </div>
+
+                    <div id="team-list" class="mt-4 space-y-2"></div>
+                </section>
+
+                <section class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+                    <div class="mb-4 flex items-center justify-between">
+                        <h2 class="text-xl font-bold">発表順結果</h2>
+                        <div id="message" class="text-sm font-medium text-red-600"></div>
+                    </div>
+
+                    <div id="roulette"
+                        class="hidden mb-5 rounded-lg border border-blue-100 bg-gradient-to-b from-blue-50 to-white p-6 text-center">
+                        <div id="rouletteRing" class="roulette-ring mx-auto mb-4 h-32 w-32 rounded-full shadow-inner"></div>
+                        <div class="text-sm font-semibold text-blue-700">抽選中</div>
+                        <div id="rouletteName" class="roulette-name mt-2 min-h-12 text-3xl font-bold text-slate-950"></div>
+                        <div id="rouletteRound" class="mt-2 text-sm text-slate-500"></div>
+                    </div>
+
+                    <div id="result" class="min-h-72 rounded-lg border border-dashed border-slate-300 bg-slate-50 p-4">
+                        <div class="flex h-60 items-center justify-center text-sm font-medium text-slate-400">未抽選</div>
+                    </div>
+                </section>
             </div>
-
-            <!-- 右カラム：結果表示 -->
-            <div class="flex-1">
-                <h2 class="text-xl font-bold mb-4">発表順の結果</h2>
-                <div id="result" class="bg-white-50"></div>
-                <div id="message" class="mt-2 text-red-500 text-sm"></div>
-            </div>
-
         </div>
-    </div>
+    </main>
 
     <script src="js/main.js"></script>
 </body>
